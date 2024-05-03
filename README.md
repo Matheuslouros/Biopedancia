@@ -1,0 +1,1 @@
+O projeto nada mais é um programa que vai receber dados do cliente ou usuario que queira fazer uma biopedancia e ira guarda os dados inseridos ne um banco de dados, nesse caso estou ultilizando o postgresMYSQL esse usuario ou cliente ira ter uma fixa de suas medidas e peso como esta seu imc, mas esse projeto precisa de umas melhorias estou trabalhando nisso!

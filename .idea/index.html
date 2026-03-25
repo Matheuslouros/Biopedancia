@@ -1,0 +1,35 @@
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+  import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCzyHiWCJduAA6rWlDqBWUpnZH5bj-83oA",
+    authDomain: "messhop-e951e.firebaseapp.com",
+    projectId: "messhop-e951e",
+    storageBucket: "messhop-e951e.firebasestorage.app",
+    messagingSenderId: "1091905150473",
+    appId: "1:1091905150473:web:e6dd7c9bada4c3156b22d8"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const produtosContainer = document.getElementById("produtos");
+
+  onSnapshot(collection(db, "produtos"), (snapshot) => {
+    produtosContainer.innerHTML = "";
+
+    snapshot.forEach((doc) => {
+      const produto = doc.data();
+
+      produtosContainer.innerHTML += `
+        <div style="background:white; margin:10px; padding:10px;">
+          <img src="${produto.Img}" width="100%">
+          <h2>${produto.Name}</h2>
+          <p>R$ ${produto.Price}</p>
+          <a href="${produto.Link}" target="_blank">Comprar</a>
+        </div>
+      `;
+    });
+  });
+</script>

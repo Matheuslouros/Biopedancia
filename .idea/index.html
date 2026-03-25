@@ -1,35 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>MeSshop</title>
+</head>
+
+<body>
+
+<h1 style="background:blue;color:white;padding:10px;text-align:center;">
+MeSshop
+</h1>
+
+<div id="produtos"></div>
+
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-  import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCzyHiWCJduAA6rWlDqBWUpnZH5bj-83oA",
-    authDomain: "messhop-e951e.firebaseapp.com",
-    projectId: "messhop-e951e",
-    storageBucket: "messhop-e951e.firebasestorage.app",
-    messagingSenderId: "1091905150473",
-    appId: "1:1091905150473:web:e6dd7c9bada4c3156b22d8"
-  };
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+const firebaseConfig = {
+  apiKey: "AIzaSyCzyHiWCJduAA6rWlDqBWUpnZH5bj-83oA",
+  authDomain: "messhop-e951e.firebaseapp.com",
+  projectId: "messhop-e951e",
+  storageBucket: "messhop-e951e.firebasestorage.app",
+  messagingSenderId: "1091905150473",
+  appId: "1:1091905150473:web:e6dd7c9bada4c3156b22d8"
+};
 
-  const produtosContainer = document.getElementById("produtos");
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-  onSnapshot(collection(db, "produtos"), (snapshot) => {
+const produtosContainer = document.getElementById("produtos");
+
+async function carregar() {
+  try {
+    const querySnapshot = await getDocs(collection(db, "produtos"));
+
     produtosContainer.innerHTML = "";
 
-    snapshot.forEach((doc) => {
+    querySnapshot.forEach((doc) => {
       const produto = doc.data();
 
       produtosContainer.innerHTML += `
-        <div style="background:white; margin:10px; padding:10px;">
+        <div style="background:#fff;margin:10px;padding:10px;">
           <img src="${produto.Img}" width="100%">
-          <h2>${produto.Name}</h2>
+          <h3>${produto.Name}</h3>
           <p>R$ ${produto.Price}</p>
           <a href="${produto.Link}" target="_blank">Comprar</a>
         </div>
       `;
     });
-  });
+
+  } catch (erro) {
+    produtosContainer.innerHTML = "<h2>Erro ao carregar dados</h2>";
+    console.error(erro);
+  }
+}
+
+carregar();
+
 </script>
+
+</body>
+</html>
+

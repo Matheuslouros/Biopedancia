@@ -7,7 +7,7 @@
 
 <body>
 
-<h1 style="background:blue;color:white;padding:10px;text-align:center;">
+<h1 style="background:#ff6600;color:white;padding:10px;text-align:center;">
 MeSshop
 </h1>
 
@@ -16,7 +16,7 @@ MeSshop
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCzyHiWCJduAA6rWlDqBWUpnZH5bj-83oA",
@@ -32,35 +32,28 @@ const db = getFirestore(app);
 
 const produtosContainer = document.getElementById("produtos");
 
-async function carregar() {
-  try {
-    const querySnapshot = await getDocs(collection(db, "produtos"));
+// TEMPO REAL (não precisa recarregar)
+onSnapshot(collection(db, "produtos"), (snapshot) => {
 
-    produtosContainer.innerHTML = "";
+  produtosContainer.innerHTML = "";
 
-    querySnapshot.forEach((doc) => {
-      const produto = doc.data();
+  snapshot.forEach((doc) => {
+    const produto = doc.data();
 
-      produtosContainer.innerHTML += `
-        <div style="background:#fff;margin:10px;padding:10px;">
-          <img src="${produto.Img}" width="100%">
-          <h3>${produto.Name}</h3>
-          <p>R$ ${produto.Price}</p>
-          <a href="${produto.Link}" target="_blank">Comprar</a>
-        </div>
-      `;
-    });
+    produtosContainer.innerHTML += `
+      <div style="background:#fff;margin:10px;padding:10px;border-radius:10px;">
+        <img src="${produto.Img}" width="100%">
+        <h3>${produto.Name}</h3>
+        <p style="color:green;">R$ ${produto.Price}</p>
+        <a href="${produto.Link}" target="_blank">Comprar</a>
+      </div>
+    `;
+  });
 
-  } catch (erro) {
-    produtosContainer.innerHTML = "<h2>Erro ao carregar dados</h2>";
-    console.error(erro);
-  }
-}
-
-carregar();
+});
 
 </script>
 
 </body>
 </html>
-
+    
